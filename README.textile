@@ -1,0 +1,29 @@
+h1. Acts As Array
+
+This plugin allow save an array of fields from a form into a single string column, avoiding the requirement of serialize an attribute.
+
+h2. The plugin in action
+
+In the model:
+
+<pre><code>  class Preference < ActiveRecord::Base
+    acts_as_array :colors # :separator => ',' (default)
+    COLORS = [
+      ['Red', 1],
+      ['Blue', 2],
+      ['Brown', 3]
+    ]
+  end</code></pre>
+
+The colors attribute is a single string column.
+
+In the form:
+
+<pre><code>- form_for @preference do |f|
+  %p
+    = hidden_field_tag 'preference[colors][]', ''
+    - Preference::COLORS.each do |c|
+      = check_box_tag "preference[colors][]", c[1], @preference.colors.include?(c[1].to_s)
+      = c[0]</code></pre>
+
+Copyright (c) 2009 "Rubén Dávila Santos":http://rubenonrails.com, released under the MIT license
